@@ -3,6 +3,22 @@ pipeline {
       triggers {
               pollSCM('H/2 * * * *')
     stages {
+    
+    
+        '''job(\'pipe-deploy\') {
+               steps {
+               copyArtifacts(\'demo-building\') {
+               includePatterns(\'*.txt\', \'*.properties\')
+               excludePatterns(\'test.xml\', \'test.properties\')
+               targetDirectory(\'files\')
+               flatten()
+               optional()
+               buildSelector {
+                latestSuccessful(true)
+               }
+             }
+           }
+         }'''
         stage('Build') {
             steps {
                 echo 'Building'
